@@ -75,7 +75,8 @@ choosePort(HOST, DEFAULT_PORT)
 				clearConsole();
 			}
 			console.log(chalk.cyan('Starting the development server...\n'));
-			openBrowser(urls.localUrlForBrowser);
+			// Disabling as using Electron
+			// openBrowser(urls.localUrlForBrowser);
 		});
 
 		['SIGINT', 'SIGTERM'].forEach(function (sig) {
