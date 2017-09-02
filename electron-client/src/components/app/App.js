@@ -37,7 +37,7 @@ class App extends Component {
 					waves='light'
 					large
 				>
-					<span>hit it!</span>
+					<span>hit it</span>
 					<Icon right>send</Icon>
 				</Button>
 			</div>
