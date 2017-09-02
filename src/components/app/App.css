@@ -7,5 +7,8 @@
 #picker-container {
 	margin: 2rem auto 2rem;
 	width: 225px;
+}
 
+.color-change-button {
+	background-color: black;
 }

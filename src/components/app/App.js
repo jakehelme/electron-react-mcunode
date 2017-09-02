@@ -6,13 +6,38 @@ import 'materialize-css/dist/js/materialize.js';
 import './App.css';
 
 class App extends Component {
+	constructor(props) {
+		super(props);
+
+		this.state = {
+			color: {
+				r: 0,
+				g: 0,
+				b: 0
+			}
+		};
+	}
+
+	handleColourChange(color) {
+		this.setState({ color: color.rgb });
+	}
+
 	render() {
 		return (
 			<div id="app">
 				<div id="picker-container">
-					<ChromePicker disableAlpha={true} />
+					<ChromePicker
+						color={this.state.color}
+						onChange={(color) => {this.handleColourChange(color);}}
+						disableAlpha={true} />
 				</div>
-				<Button waves='light'>hit it!
+				{/* <Button className="color-change-button" waves='light'>hit it! */}
+				<Button
+					style={{ backgroundColor: `rgb(${this.state.color.r},${this.state.color.g},${this.state.color.b})` }}
+					waves='light'
+					large
+				>
+					<span>hit it!</span>
 					<Icon right>send</Icon>
 				</Button>
 			</div>
