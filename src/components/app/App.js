@@ -16,22 +16,18 @@ class App extends Component {
 		super(props);
 
 		this.state = {
-			color: {
-				r: 0,
-				g: 0,
-				b: 0
-			}
+			color: '#000000'
 		};
 	}
 
 	handleColourChange(color) {
-		this.setState({ color: color.rgb });
+		this.setState({ color: color.hex });
 	}
 
 	handleSend() {
 		// eslint-disable-next-line no-console
 		console.log('sending to electron');
-		ipcRenderer.send('async', 1);
+		ipcRenderer.send('async', this.state.color.substr(1,6));
 	}
 
 	render() {
@@ -46,7 +42,7 @@ class App extends Component {
 				{/* <Button className="color-change-button" waves='light'>hit it! */}
 				<Button
 					onClick={() => { this.handleSend();}}
-					style={{ backgroundColor: `rgb(${this.state.color.r},${this.state.color.g},${this.state.color.b})` }}
+					style={{ backgroundColor: this.state.color }}
 					waves='light'
 					large
 				>

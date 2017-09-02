@@ -6,6 +6,9 @@ const ipcMain = electron.ipcMain;
 // Module to create native browser window.
 const BrowserWindow = electron.BrowserWindow;
 
+const mqtt = require('mqtt');
+let client;
+
 const path = require('path');
 const url = require('url');
 
@@ -28,6 +31,12 @@ function createWindow() {
 
 	// Open the DevTools.
 	// mainWindow.webContents.openDevTools();
+
+	client = mqtt.connect('mqtt://localhost:1883');
+
+	client.on('connect', function () {
+		console.log('connected to broker');
+	});
 
 	// Emitted when the window is closed.
 	mainWindow.on('closed', function () {
@@ -52,11 +61,14 @@ app.on('window-all-closed', function () {
 	}
 });
 
+
+
 // Listen for async message from renderer process
 ipcMain.on('async', (event, arg) => {
 	// Print 1
 	console.log('async received', arg);
 	// Reply on async message from renderer process
+	client.publish('cmnd/neo/hex', arg);
 });
 
 app.on('activate', function () {
