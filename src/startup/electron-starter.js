@@ -2,6 +2,7 @@
 const electron = require('electron');
 // Module to control application life.
 const app = electron.app;
+const ipcMain = electron.ipcMain;
 // Module to create native browser window.
 const BrowserWindow = electron.BrowserWindow;
 
@@ -49,6 +50,13 @@ app.on('window-all-closed', function () {
 	if (process.platform !== 'darwin') {
 		app.quit();
 	}
+});
+
+// Listen for async message from renderer process
+ipcMain.on('async', (event, arg) => {
+	// Print 1
+	console.log('async received', arg);
+	// Reply on async message from renderer process
 });
 
 app.on('activate', function () {
