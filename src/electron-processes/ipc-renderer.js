@@ -1,3 +1,4 @@
+const message = require('./../messages');
 let window;
 
 function initialize(mainWindow) {
@@ -5,11 +6,15 @@ function initialize(mainWindow) {
 }
 
 function sendMqttStatus(connected) {
-	console.log('sending');
-	window.webContents.send('MQTT_BROKER_STATUS', connected);
+	window.webContents.send(message.MQTT_BROKER_STATUS, connected);
+}
+
+function sendNodeMcuStatus(connected) {
+	window.webContents.send(message.NODEMCU_STATUS, connected);
 }
 
 module.exports = {
 	initialize,
-	sendMqttStatus
+	sendMqttStatus,
+	sendNodeMcuStatus
 };

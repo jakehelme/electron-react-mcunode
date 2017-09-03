@@ -15,6 +15,7 @@ function connect() {
 		console.log('Connected to MQTT Broker');
 		isConnected = true;
 		ipcRenderer.sendMqttStatus(isConnected);
+		client.subscribe('tele/neo/alive');
 	});
 
 	client.on('reconnect', function () {
@@ -32,8 +33,9 @@ function connect() {
 
 	client.on('message', function (topic) {
 		// message is Buffer
-		if(topic === 'NODEMCU_STATUS') {
+		if(topic === 'tele/neo/alive') {
 			isNodeMcuConnected = true;
+			ipcRenderer.sendNodeMcuStatus(isNodeMcuConnected);
 		}
 	});
 
