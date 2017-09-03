@@ -5,4 +5,4 @@ function sendMqttStatus(window, connected) {
 
 module.exports = {
 	sendMqttStatus
-}
+};
