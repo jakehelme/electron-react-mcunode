@@ -1,16 +1,9 @@
-/* eslint no-console: "off" */
-const electron = require('electron');
-// Module to control application life.
-const app = electron.app;
-const ipcMain = electron.ipcMain;
-// Module to create native browser window.
-const BrowserWindow = electron.BrowserWindow;
-
-const mqtt = require('mqtt');
-let client;
-
 const path = require('path');
 const url = require('url');
+const electron = require('electron');
+let processes = require('./../electron-processes');
+const app = electron.app;
+const BrowserWindow = electron.BrowserWindow;
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -18,8 +11,14 @@ let mainWindow;
 
 function createWindow() {
 	// Create the browser window.
-	mainWindow = new BrowserWindow({ width: 800, height: 600 });
-
+	mainWindow = new BrowserWindow({
+		width: 800,
+		height: 600,
+		resizable: false,
+		title: 'NeoPixel Controller'
+	});
+	// Turn off the menu
+	mainWindow.setMenu(null);
 	// and load the index.html of the app.
 	const startUrl = process.env.ELECTRON_START_URL || url.format({
 		pathname: path.join(__dirname, './../../build/index.html'),
@@ -30,13 +29,7 @@ function createWindow() {
 	mainWindow.loadURL(startUrl);
 
 	// Open the DevTools.
-	// mainWindow.webContents.openDevTools();
-
-	client = mqtt.connect('mqtt://localhost:1883');
-
-	client.on('connect', function () {
-		console.log('connected to broker');
-	});
+	mainWindow.webContents.openDevTools();
 
 	// Emitted when the window is closed.
 	mainWindow.on('closed', function () {
@@ -45,6 +38,8 @@ function createWindow() {
 		// when you should delete the corresponding element.
 		mainWindow = null;
 	});
+
+	processes.initializeProcesses(mainWindow);
 }
 
 // This method will be called when Electron has finished
@@ -59,16 +54,6 @@ app.on('window-all-closed', function () {
 	if (process.platform !== 'darwin') {
 		app.quit();
 	}
-});
-
-
-
-// Listen for async message from renderer process
-ipcMain.on('async', (event, arg) => {
-	// Print 1
-	console.log('async received', arg);
-	// Reply on async message from renderer process
-	client.publish('cmnd/neo/hex', arg);
 });
 
 app.on('activate', function () {

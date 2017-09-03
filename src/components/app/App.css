@@ -1,14 +1,12 @@
-#app {
-	width: 500px;
-	margin: 0 auto;
-	text-align: center;
-}
-
-#picker-container {
-	margin: 2rem auto 2rem;
-	width: 225px;
-}
 
 .color-change-button {
 	background-color: black;
+}
+
+.chrome-picker {
+	width: 100% !important;
+}
+
+.success-icon {
+	color: goldenrod;
 }
