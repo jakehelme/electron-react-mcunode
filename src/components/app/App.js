@@ -17,23 +17,15 @@ class App extends Component {
 	}
 
 	componentDidMount() {
-		ipcRenderer.on('MQTT_CONNECTED', (event, arg) => {
-			// eslint-disable-next-line
-			console.log('arg',arg);
+		ipcRenderer.on('MQTT_BROKER_STATUS', (event, arg) => {
 			this.setState({mqttConnected: arg});
 		});
 
-		ipcRenderer.send('async', 'CHECK_MQTT');
+		ipcRenderer.send('MQTT_BROKER_STATUS');
 	}
 
 	handleColourChange(color) {
 		this.setState({ color: color.hex });
-	}
-
-	handleRefresh() {
-		// eslint-disable-next-line
-		console.log('refresh');
-		ipcRenderer.send('async', 'CHECK_MQTT');
 	}
 
 	render() {
@@ -42,10 +34,7 @@ class App extends Component {
 			<div>
 				<Row>
 					<Col m={6} s={12}>
-						<CardPanel
-							className={ connected ? 'green darken-3' : 'red darken-3'}
-							textClassName='white-text'
-						>
+						<CardPanel className={ connected ? 'green darken-3' : 'red darken-3'}>
 							{ connected ? <h5>Connected</h5> : <h5>Disconnected</h5>}
 						</CardPanel>
 					</Col>
@@ -63,7 +52,7 @@ class App extends Component {
 				</Row>
 
 				<Button
-					onClick={() => { this.handleRefresh(); }}
+					onClick={() => {  }}
 					style={{ backgroundColor: this.state.color }}
 					waves='light'
 					large

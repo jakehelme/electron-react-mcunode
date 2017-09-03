@@ -1,11 +1,11 @@
 let mqtt = require('./mqtt');
 let ipcMain = require('./ipc-main');
-// let ipcRenderer = require('./ipc-renderer');
+let ipcRenderer = require('./ipc-renderer');
 
 function initializeProcesses(mainWindow) {
-	mqtt.connect(mainWindow);
 	ipcMain.registerListeners();
-
+	ipcRenderer.initialize(mainWindow);
+	mqtt.connect();
 }
 
 module.exports = { initializeProcesses };

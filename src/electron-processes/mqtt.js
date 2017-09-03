@@ -1,11 +1,11 @@
 const mqtt = require('mqtt');
 const ipcRenderer = require('./ipc-renderer');
 let isConnected = false;
+let isNodeMcuConnected = false;
 let client;
-let mainWindow;
 
-function connect(window) {
-	mainWindow = window;
+function connect() {
+
 	// eslint-disable-next-line
 	console.log('Connecting...');
 	client = mqtt.connect('mqtt://localhost:1883');
@@ -14,7 +14,7 @@ function connect(window) {
 		// eslint-disable-next-line
 		console.log('Connected to MQTT Broker');
 		isConnected = true;
-		ipcRenderer.sendMqttStatus(mainWindow, isConnected);
+		ipcRenderer.sendMqttStatus(isConnected);
 	});
 
 	client.on('reconnect', function () {
@@ -27,7 +27,14 @@ function connect(window) {
 		// eslint-disable-next-line
 		console.log('Offline');
 		isConnected = false;
-		ipcRenderer.sendMqttStatus(mainWindow, isConnected);
+		ipcRenderer.sendMqttStatus(isConnected);
+	});
+
+	client.on('message', function (topic) {
+		// message is Buffer
+		if(topic === 'NODEMCU_STATUS') {
+			isNodeMcuConnected = true;
+		}
 	});
 
 	client.on('error', function () {
@@ -44,5 +51,6 @@ function publish(topic, message) {
 module.exports = {
 	connect,
 	publish,
-	isConnected: () => {return isConnected;}
+	isConnected: () => {return isConnected;},
+	isNodeMcuConnected: () => {return isNodeMcuConnected;}
 };
