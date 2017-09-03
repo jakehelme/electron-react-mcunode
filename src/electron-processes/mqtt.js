@@ -16,6 +16,7 @@ function connect() {
 		isConnected = true;
 		ipcRenderer.sendMqttStatus(isConnected);
 		client.subscribe('tele/neo/alive');
+		client.subscribe('tele/neo/dead');
 	});
 
 	client.on('reconnect', function () {
@@ -35,8 +36,13 @@ function connect() {
 		// message is Buffer
 		if(topic === 'tele/neo/alive') {
 			isNodeMcuConnected = true;
-			ipcRenderer.sendNodeMcuStatus(isNodeMcuConnected);
 		}
+		if(topic === 'tele/neo/dead') {
+			isNodeMcuConnected = false;
+		}
+
+		ipcRenderer.sendNodeMcuStatus(isNodeMcuConnected);
+
 	});
 
 	client.on('error', function () {
